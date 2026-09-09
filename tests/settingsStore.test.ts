@@ -27,6 +27,7 @@ export const tests = [
       const settings = normalizeSettings({
         language: "en",
         petAppearanceId: "lovartPuppy",
+        dailyRoutineEnabled: false,
         launchAtLoginEnabled: true,
         checkUpdatesOnLaunchEnabled: true,
         breakRunDurationSeconds: 90
@@ -34,9 +35,19 @@ export const tests = [
 
       assert.equal(settings.language, "en");
       assert.equal(settings.petAppearanceId, "lovartPuppy");
+      assert.equal(settings.dailyRoutineEnabled, false);
       assert.equal(settings.launchAtLoginEnabled, true);
       assert.equal(settings.checkUpdatesOnLaunchEnabled, true);
       assert.equal(settings.breakRunDurationSeconds, 90);
+    }
+  },
+  {
+    name: "normalizeSettings rejects invalid daily routine flags",
+    run(): void {
+      assert.equal(
+        normalizeSettings({ dailyRoutineEnabled: "yes" as never }).dailyRoutineEnabled,
+        DEFAULT_SETTINGS.dailyRoutineEnabled
+      );
     }
   },
   {

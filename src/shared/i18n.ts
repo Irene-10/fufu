@@ -159,7 +159,11 @@ export const I18N = {
         focusAlert: "分心提醒",
         focusDone: "专注完成",
         sad: "难过",
-        sleeping: "睡觉"
+        sleeping: "睡觉",
+        working: "工作",
+        eating: "吃饭",
+        exercising: "运动",
+        reading: "看书"
       },
       petStateDescriptions: {
         idle: "没有提醒或专注任务时显示",
@@ -175,8 +179,16 @@ export const I18N = {
         focusAlert: "专注时命中分心规则显示",
         focusDone: "专注计时完成后显示",
         sad: "拒绝或忽略提醒时显示",
-        sleeping: "长时间安静或休息状态显示"
+        sleeping: "长时间安静或休息状态显示",
+        working: "固定作息的工作时段显示",
+        eating: "固定作息的用餐时段显示",
+        exercising: "固定作息的运动时段显示",
+        reading: "固定作息的阅读时段显示"
       },
+      dailyRoutine: "固定作息",
+      enableDailyRoutine: "启用小狗固定作息",
+      dailyRoutineHelp: "小狗会按照电脑本地时间自动切换状态；提醒和专注期间会暂时覆盖作息状态。",
+      dailyRoutineSchedule: "小狗每日时间表",
       reminders: "提醒",
       enableBreakReminder: "开启休息提醒",
       breakInterval: "休息间隔",
@@ -400,7 +412,11 @@ export const I18N = {
         focusAlert: "Focus Alert",
         focusDone: "Focus Done",
         sad: "Sad",
-        sleeping: "Sleeping"
+        sleeping: "Sleeping",
+        working: "Working",
+        eating: "Eating",
+        exercising: "Exercising",
+        reading: "Reading"
       },
       petStateDescriptions: {
         idle: "Shown when no reminder or focus task is active",
@@ -416,8 +432,16 @@ export const I18N = {
         focusAlert: "Shown when a blocked app or keyword is detected",
         focusDone: "Shown after a focus session completes",
         sad: "Shown after reminders are refused or ignored",
-        sleeping: "Shown during quiet or resting moments"
+        sleeping: "Shown during quiet or resting moments",
+        working: "Shown during scheduled work hours",
+        eating: "Shown during scheduled meal times",
+        exercising: "Shown during scheduled exercise time",
+        reading: "Shown during scheduled reading time"
       },
+      dailyRoutine: "Daily Routine",
+      enableDailyRoutine: "Enable the Dog's Daily Routine",
+      dailyRoutineHelp: "The dog changes state using your computer's local time. Reminders and Focus temporarily take priority.",
+      dailyRoutineSchedule: "Dog's daily schedule",
       reminders: "Reminders",
       enableBreakReminder: "Enable Break Reminder",
       breakInterval: "Break Interval",

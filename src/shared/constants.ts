@@ -7,6 +7,7 @@ export const DEFAULT_SETTINGS: Settings = {
   onboardingDismissed: false,
   launchAtLoginEnabled: false,
   checkUpdatesOnLaunchEnabled: false,
+  dailyRoutineEnabled: true,
   breakReminderEnabled: true,
   breakIntervalMinutes: 45,
   breakRunDurationSeconds: 60,

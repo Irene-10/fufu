@@ -72,8 +72,15 @@ textarea {
 
 .state-idle,
 .state-sitting,
-.state-sleeping {
+.state-sleeping,
+.state-working,
+.state-eating,
+.state-reading {
   animation: pet-breathe 3.2s ease-in-out infinite;
+}
+
+.state-exercising {
+  animation: pet-bob 1.4s ease-in-out infinite;
 }
 
 .state-happy,
@@ -444,6 +451,32 @@ textarea {
   flex: 0 0 auto;
   justify-content: flex-end;
   max-width: 60%;
+}
+
+.routine-list {
+  background: rgba(255, 255, 255, 0.24);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 8px 12px;
+}
+
+.routine-list__item {
+  align-items: baseline;
+  color: var(--ink);
+  display: flex;
+  font-size: 12.5px;
+  gap: 8px;
+  min-width: 0;
+  padding: 5px 0;
+}
+
+.routine-list__time {
+  color: var(--ink-faint);
+  flex: 0 0 82px;
+  font-variant-numeric: tabular-nums;
 }
 
 .pref-toggle {
@@ -1188,6 +1221,10 @@ textarea {
 
   .pref-button-group {
     justify-content: flex-start;
+  }
+
+  .routine-list {
+    grid-template-columns: 1fr;
   }
 
   .custom-pet-slot {

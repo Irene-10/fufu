@@ -20,7 +20,11 @@ export type PetState =
   | "focusAlert"
   | "focusDone"
   | "sad"
-  | "sleeping";
+  | "sleeping"
+  | "working"
+  | "eating"
+  | "exercising"
+  | "reading";
 
 export type CustomPetAsset = {
   relativePath: string;
@@ -55,6 +59,7 @@ export type Settings = {
   onboardingDismissed: boolean;
   launchAtLoginEnabled: boolean;
   checkUpdatesOnLaunchEnabled: boolean;
+  dailyRoutineEnabled: boolean;
   breakReminderEnabled: boolean;
   breakIntervalMinutes: number;
   breakRunDurationSeconds: number;

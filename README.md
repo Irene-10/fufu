@@ -25,12 +25,30 @@ PawPal 是一个桌面宠物应用，支持 macOS 和 Windows。一只透明、�
 
 ## 功能
 
+- **固定作息** — 小狗按照电脑本地时间自动工作、吃饭、午睡、运动、看书和睡觉
 - **休息提醒** — 定时提醒你站起来活动一下，小狗会跑过整个屏幕引起你的注意
 - **喝水提醒** — 别忘了喝水
 - **专注模式** — 检测你当前在用的 app，如果你在刷社交媒体，小狗会来提醒你回去工作
 - **多种宠物外观** — 目前有线条小狗和金毛 puppy 两种风格
 - **中文 / English** — 支持中英文切换
 - **本地优先** — 设置和统计数据保存在本地；只有手动检查更新或开启启动时检查更新时才会访问 GitHub Releases
+
+### 小狗的每日作息
+
+固定作息默认开启，可在设置中关闭。休息提醒、喝水提醒和专注模式会暂时覆盖作息动画，结束后小狗会回到当前时间对应的状态。
+
+| 时间 | 状态 |
+|------|------|
+| 23:00–07:00 | 睡觉 |
+| 07:00–08:00 | 默认状态 |
+| 08:00–12:00 | 工作 |
+| 12:00–13:00 | 吃饭 |
+| 13:00–14:00 | 午睡 |
+| 14:00–18:00 | 工作 |
+| 18:00–19:00 | 吃饭 |
+| 19:00–20:00 | 默认状态 |
+| 20:00–21:00 | 运动 |
+| 21:00–23:00 | 看书 |
 
 ## 安装
 
@@ -87,13 +105,15 @@ pnpm dist:win     # 仅打包 Windows（需要 Wine 或在 Windows 上运行）
 src/main/       主进程：窗口管理、托盘菜单、定时器、持久化、专注检测、更新检查
 src/preload/    IPC 桥接层
 src/renderer/   React UI（宠物窗口 + 设置窗口）
-src/shared/     共享类型、默认配置、i18n、宠物外观定义
+src/shared/     共享类型、固定作息、默认配置、i18n、宠物外观定义
 tests/          纯逻辑测试
 pet_assets/     宠物动画素材（GIF）
 ```
 
 ## 开发路线
 
+- [x] 固定的小狗每日作息
+- [ ] 可编辑的工作日/周末时间表
 - [ ] 更多宠物外观
 - [ ] 声音效果
 - [ ] Windows 分心检测
@@ -113,12 +133,30 @@ PawPal is a desktop pet app for macOS and Windows. A transparent, always-on-top 
 
 ### Features
 
+- **Fixed daily routine** — the dog automatically works, eats, naps, exercises, reads, and sleeps using your computer's local time
 - **Break reminders** — timed nudges to get up and move; the dog runs across your screen to get your attention
 - **Hydration reminders** — don't forget to drink water
 - **Focus mode** — detects what app you're using; if you're on social media, the dog will nudge you back to work
 - **Multiple pet styles** — line-drawing dog and golden retriever puppy
 - **Chinese / English UI**
 - **Local-first data** — settings and stats stay on your machine; PawPal only contacts GitHub Releases when you manually check for updates or opt in to launch-time checks
+
+### Daily routine
+
+The routine is enabled by default and can be disabled in Settings. Break, hydration, and Focus states temporarily take priority; the dog returns to the current scheduled state afterward.
+
+| Time | State |
+|------|------|
+| 23:00–07:00 | Sleeping |
+| 07:00–08:00 | Idle |
+| 08:00–12:00 | Working |
+| 12:00–13:00 | Eating |
+| 13:00–14:00 | Napping |
+| 14:00–18:00 | Working |
+| 18:00–19:00 | Eating |
+| 19:00–20:00 | Idle |
+| 20:00–21:00 | Exercising |
+| 21:00–23:00 | Reading |
 
 ### Install
 

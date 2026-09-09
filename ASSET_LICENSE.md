@@ -16,6 +16,9 @@ Current built-in appearances:
 
 - `pet_assets/金毛 puppy/`
 - `pet_assets/线条小狗/`
+- `pet_assets/小鸡毛/`
+
+The fixed daily routine currently reuses existing built-in animations as fallback assets for working, eating, exercising, and reading. No additional third-party animation files were added with that feature.
 
 ## Raw Working Assets
 

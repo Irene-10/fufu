@@ -29,6 +29,10 @@ export function normalizeSettings(stored: Partial<Settings> = {}): Settings {
         ? DEFAULT_SETTINGS.petAppearanceId
         : petAppearanceId,
     customPetAppearance,
+    dailyRoutineEnabled:
+      typeof stored.dailyRoutineEnabled === "boolean"
+        ? stored.dailyRoutineEnabled
+        : DEFAULT_SETTINGS.dailyRoutineEnabled,
     breakRunDurationSeconds: normalizeNumber(
       stored.breakRunDurationSeconds,
       DEFAULT_SETTINGS.breakRunDurationSeconds,

@@ -13,7 +13,15 @@ type DragRef = {
   dragging: boolean;
 };
 
-const CONTINUOUS_ASSET_STATES = new Set<PetState>(["idle", "focusGuard"]);
+const CONTINUOUS_ASSET_STATES = new Set<PetState>([
+  "idle",
+  "focusGuard",
+  "working",
+  "eating",
+  "exercising",
+  "reading",
+  "sleeping"
+]);
 const CONTINUOUS_ASSET_ROTATION_MS = 15 * 60 * 1000;
 const DRAG_START_DISTANCE_PX = 10;
 const PET_BUTTON_SELECTOR = ".pet-button";

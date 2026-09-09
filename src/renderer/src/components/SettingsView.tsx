@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { DragEvent, JSX, ReactNode } from "react";
+import { DAILY_ROUTINE } from "../../../shared/dailyRoutine";
 import { i18n, LANGUAGE_OPTIONS, resolveLanguage } from "../../../shared/i18n";
 import {
   hasRequiredCustomPetAssets,
@@ -487,6 +488,31 @@ export function SettingsView(): JSX.Element {
             onUpload={(state) => void uploadCustomPetAsset(state)}
           />
         ) : null}
+      </section>
+
+      <section className="prefs__group">
+        <h2 className="prefs__group-title">{labels.dailyRoutine}</h2>
+        <Row
+          label={labels.enableDailyRoutine}
+          hint={labels.dailyRoutineHelp}
+          control={
+            <ToggleControl
+              checked={draft.dailyRoutineEnabled}
+              onChange={(dailyRoutineEnabled) => updateDraft({ dailyRoutineEnabled })}
+              ariaLabel={labels.enableDailyRoutine}
+            />
+          }
+        />
+        <ol className="routine-list" aria-label={labels.dailyRoutineSchedule}>
+          {DAILY_ROUTINE.map((period) => (
+            <li className="routine-list__item" key={period.id}>
+              <time className="routine-list__time">
+                {period.start}–{period.end}
+              </time>
+              <span>{labels.petStates[period.state]}</span>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <section className="prefs__group">

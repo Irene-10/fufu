@@ -34,7 +34,11 @@ export const PET_STATE_ORDER: PetState[] = [
   "focusAlert",
   "focusDone",
   "sad",
-  "sleeping"
+  "sleeping",
+  "working",
+  "eating",
+  "exercising",
+  "reading"
 ];
 
 export const REQUIRED_CUSTOM_PET_STATES: PetState[] = ["idle"];
@@ -47,7 +51,11 @@ const xiaoJiMao = (state: PetState, name: string): string => `pet_assets/小鸡�
 const STATE_FALLBACKS: Partial<Record<PetState, PetState>> = {
   breakDone: "happy",
   hydrationDone: "happy",
-  focusDone: "happy"
+  focusDone: "happy",
+  working: "focusGuard",
+  eating: "idle",
+  exercising: "breakRunning",
+  reading: "sitting"
 };
 
 export const PET_APPEARANCES: Record<BuiltInPetAppearanceId, PetAppearanceManifest> = {

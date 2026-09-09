@@ -24,7 +24,11 @@ const petStates: PetState[] = [
   "focusAlert",
   "focusDone",
   "sad",
-  "sleeping"
+  "sleeping",
+  "working",
+  "eating",
+  "exercising",
+  "reading"
 ];
 
 function pathsFor(appearanceId: PetAppearanceId, state: PetState): string[] {
@@ -71,6 +75,16 @@ export const tests = [
         path: "custom_pet_assets/idle/idle.gif",
         isPlaceholder: true
       });
+    }
+  },
+  {
+    name: "routine states resolve to safe built-in fallback assets",
+    run(): void {
+      for (const appearanceId of ["lovartPuppy", "lineDog", "xiaoJiMao"] as const) {
+        for (const state of ["working", "eating", "exercising", "reading"] as const) {
+          assert.ok(pathsFor(appearanceId, state).length > 0, `${appearanceId}:${state}`);
+        }
+      }
     }
   },
   {

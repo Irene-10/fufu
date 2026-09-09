@@ -9,6 +9,7 @@ import {
   Menu,
   nativeTheme,
   net,
+  powerMonitor,
   protocol,
   screen,
   shell,
@@ -19,6 +20,12 @@ import {
   createEmptyStats,
   DEFAULT_SETTINGS
 } from "../shared/constants";
+import {
+  getDailyRoutineState,
+  isDailyRoutineState,
+  nextDailyRoutineTransition,
+  resolveLongTermPetState
+} from "../shared/dailyRoutine";
 import { i18n, pick } from "../shared/i18n";
 import { PET_STATE_ORDER } from "../shared/petAppearances";
 import type {
@@ -116,6 +123,8 @@ let focusTimer: NodeJS.Timeout | null = null;
 let distractionTimer: NodeJS.Timeout | null = null;
 let distractionStartupTimer: NodeJS.Timeout | null = null;
 let displayChangeTimer: NodeJS.Timeout | null = null;
+let routineTransitionTimer: NodeJS.Timeout | null = null;
+let routineRecheckTimer: NodeJS.Timeout | null = null;
 let breakDueAt: number | null = null;
 let hydrationDueAt: number | null = null;
 let focusEndsAt: number | null = null;
@@ -161,6 +170,7 @@ function setSettings(next: Settings): void {
   settingsWindow?.setTitle(`${APP_NAME} ${text().menu.settings}`);
   scheduleReminderTimers();
   scheduleDistractionDetection();
+  scheduleDailyRoutineTimers();
   updateTrayMenu();
 }
 
@@ -281,6 +291,48 @@ function publishSnapshot(): void {
 function setPetState(next: PetState): void {
   petState = next;
   sendToAll("pet:set-state", next);
+}
+
+function getBasePetState(date = new Date()): PetState {
+  return getSettings().dailyRoutineEnabled ? getDailyRoutineState(date) : "idle";
+}
+
+function getLongTermPetState(date = new Date()): PetState {
+  return resolveLongTermPetState(
+    { dailyRoutineEnabled: getSettings().dailyRoutineEnabled, focusActive },
+    date
+  );
+}
+
+function refreshDailyRoutineState(): void {
+  if (blockingMode || focusActive || !isDailyRoutineState(petState)) return;
+  const next = getBasePetState();
+  if (petState !== next) setPetState(next);
+}
+
+function clearDailyRoutineTimers(): void {
+  if (routineTransitionTimer) {
+    clearTimeout(routineTransitionTimer);
+    routineTransitionTimer = null;
+  }
+  if (routineRecheckTimer) {
+    clearInterval(routineRecheckTimer);
+    routineRecheckTimer = null;
+  }
+}
+
+function scheduleDailyRoutineTimers(): void {
+  clearDailyRoutineTimers();
+  refreshDailyRoutineState();
+
+  const now = new Date();
+  const nextTransition = nextDailyRoutineTransition(now);
+  const delayMs = Math.max(250, nextTransition.getTime() - now.getTime());
+  routineTransitionTimer = setTimeout(() => {
+    refreshDailyRoutineState();
+    scheduleDailyRoutineTimers();
+  }, delayMs);
+  routineRecheckTimer = setInterval(refreshDailyRoutineState, 60_000);
 }
 
 function setPetFacing(next: PetFacing): void {
@@ -692,10 +744,10 @@ function finishBreakRun(): void {
   setPetState("breakDone");
   scheduleBreakReminderTimer();
   setTimeout(() => {
-    if (!blockingMode && !focusActive) {
+    if (!blockingMode) {
       if (showOverdueReminder()) return;
       hideBubble();
-      setPetState("idle");
+      setPetState(getLongTermPetState());
     }
   }, 2300);
   publishSnapshot();
@@ -877,20 +929,19 @@ function resumeLongTermState(): void {
     sendToAll("app:snapshot", snapshot());
     return;
   }
-  setPetState("idle");
+  setPetState(getBasePetState());
   sendToAll("app:snapshot", snapshot());
 }
 
 function happyFeedback(message: string | null = pick(text().bubble.woof), after?: () => void): void {
   if (blockingMode) return;
-  const returnState = focusActive ? "focusGuard" : "idle";
   setPetState("happy");
   if (message) {
     showBubble({ id: "happy", message, autoDismissMs: 1800 });
   }
   setTimeout(() => {
     hideBubble();
-    setPetState(returnState);
+    setPetState(getLongTermPetState());
     after?.();
   }, 1900);
 }
@@ -919,7 +970,7 @@ function showUpdateAvailableNotice(result: UpdateCheckResult): void {
     autoDismissMs: 12000
   });
   setTimeout(() => {
-    if (!blockingMode && petState === "happy") setPetState(focusActive ? "focusGuard" : "idle");
+    if (!blockingMode && petState === "happy") setPetState(getLongTermPetState());
   }, 12_100);
 }
 
@@ -1061,7 +1112,7 @@ function stopFocusMode(completed: boolean): void {
     if (!focusActive && !blockingMode) {
       if (showOverdueReminder()) return;
       hideBubble();
-      setPetState("idle");
+      setPetState(getBasePetState());
     }
   }, 2900);
   updateTrayMenu();
@@ -1078,7 +1129,7 @@ function triggerDemo(trigger: DemoTrigger): void {
 function handleBubbleAction(actionId: string): void {
   if (actionId === "app:open-release-notes") {
     hideBubble();
-    setPetState(focusActive ? "focusGuard" : "idle");
+    setPetState(getLongTermPetState());
     openReleaseNotes();
     return;
   }
@@ -1120,7 +1171,7 @@ function handleBubbleAction(actionId: string): void {
         scheduleHydrationReminderTimer();
         if (showOverdueReminder()) return;
         hideBubble();
-        setPetState(focusActive ? "focusGuard" : "idle");
+        setPetState(getLongTermPetState());
       }, 1900);
     }, 2400);
     return;
@@ -1214,8 +1265,10 @@ app.whenReady().then(() => {
   createPetWindow();
   createTray();
   registerDisplayChangeHandlers();
+  scheduleDailyRoutineTimers();
   scheduleReminderTimers();
   scheduleDistractionDetection();
+  powerMonitor.on("resume", scheduleDailyRoutineTimers);
   if (IS_DEV) {
     createSettingsWindow();
   }
@@ -1239,6 +1292,8 @@ app.on("before-quit", () => {
     distractionTimer,
     distractionStartupTimer,
     displayChangeTimer,
+    routineTransitionTimer,
+    routineRecheckTimer,
     bubbleTimer,
     dragTimer,
     dragSafetyTimer

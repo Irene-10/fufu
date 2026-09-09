@@ -43,7 +43,7 @@ export const tests = [
     name: "classifyDistraction ignores the app itself",
     run(): void {
       assert.equal(
-        classifyDistraction(active("PawPal", "youtube"), settings({ distractionBlockedKeywords: ["youtube"] })),
+        classifyDistraction(active("Fufu", "youtube"), settings({ distractionBlockedKeywords: ["youtube"] })),
         null
       );
     }

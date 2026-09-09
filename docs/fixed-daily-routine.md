@@ -1,6 +1,6 @@
 # Fixed Daily Routine V1
 
-PawPal's fixed daily routine is a local-time display layer. It does not create tasks, send additional notifications, or record whether the user followed the schedule.
+Fufu's fixed daily routine is a local-time display layer. It does not create tasks, send additional notifications, or record whether the user followed the schedule.
 
 ## Schedule
 
@@ -36,7 +36,7 @@ After a temporary interaction finishes, the main process resolves the long-term 
 - A timer is scheduled for the next routine boundary.
 - A minute-level reconciliation corrects missed timers.
 - The routine is rescheduled when Windows resumes from sleep.
-- No missed states are replayed after sleep; PawPal immediately shows the current state.
+- No missed states are replayed after sleep; Fufu immediately shows the current state.
 
 ## Animation fallbacks
 

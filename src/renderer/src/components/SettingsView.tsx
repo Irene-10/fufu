@@ -307,7 +307,7 @@ function customPetStateKindClass(state: PetState): string {
 }
 
 function customPetAssetPreviewSrc(asset: CustomPetAsset): string {
-  return new URL(window.pawpal.assetUrl(asset.relativePath)).href;
+  return new URL(window.fufu.assetUrl(asset.relativePath)).href;
 }
 
 export function SettingsView(): JSX.Element {
@@ -344,7 +344,7 @@ export function SettingsView(): JSX.Element {
   useEffect(() => {
     if (!settingsDirty) return;
     const timer = window.setTimeout(() => {
-      window.pawpal.updateSettings(draft);
+      window.fufu.updateSettings(draft);
       setSettingsDirty(false);
     }, 350);
     return () => window.clearTimeout(timer);
@@ -356,20 +356,20 @@ export function SettingsView(): JSX.Element {
   }
 
   async function checkForUpdates(): Promise<void> {
-    await window.pawpal.checkForUpdates();
+    await window.fufu.checkForUpdates();
   }
 
   async function uploadCustomPetAsset(state: PetState): Promise<void> {
-    const asset = await window.pawpal.selectCustomPetAsset(state);
+    const asset = await window.fufu.selectCustomPetAsset(state);
     if (!asset) return;
     applyCustomPetAsset(state, asset);
   }
 
   async function uploadDroppedCustomPetAsset(state: PetState, file: File): Promise<void> {
     if (!file.name.toLowerCase().endsWith(".gif")) return;
-    const sourcePath = window.pawpal.pathForFile(file);
+    const sourcePath = window.fufu.pathForFile(file);
     if (!sourcePath) return;
-    const asset = await window.pawpal.importCustomPetAsset(state, sourcePath);
+    const asset = await window.fufu.importCustomPetAsset(state, sourcePath);
     if (!asset) return;
     applyCustomPetAsset(state, asset);
   }
@@ -406,7 +406,7 @@ export function SettingsView(): JSX.Element {
       <header className="prefs__head">
         <img className="prefs__avatar" src={petAvatar.src} alt="" />
         <div className="prefs__intro">
-          <p className="prefs__eyebrow">PawPal</p>
+          <p className="prefs__eyebrow">Fufu</p>
           <h1 className="prefs__title">{labels.today}</h1>
         </div>
       </header>
@@ -642,18 +642,18 @@ export function SettingsView(): JSX.Element {
         ) : null}
         <div className="prefs__inline-actions">
           {snapshot.focusActive ? (
-            <button type="button" className="pref-button" onClick={window.pawpal.stopFocus}>
+            <button type="button" className="pref-button" onClick={window.fufu.stopFocus}>
               {labels.stopFocus}
             </button>
           ) : (
-            <button type="button" className="pref-button is-primary" onClick={window.pawpal.startFocus}>
+            <button type="button" className="pref-button is-primary" onClick={window.fufu.startFocus}>
               {labels.startFocus}
             </button>
           )}
         </div>
       </section>
 
-      {!window.pawpal.isPackaged && (
+      {!window.fufu.isPackaged && (
         <section className="prefs__group">
           <h2 className="prefs__group-title">{labels.testTools}</h2>
           <div className="test-tools">
@@ -661,7 +661,7 @@ export function SettingsView(): JSX.Element {
             <DemoChip trigger="hydration" label={labels.demoWater} />
             <DemoChip trigger="focusWarning" label={labels.demoFocusWarning} />
             <DemoChip trigger="happy" label={labels.demoHappy} />
-            <button type="button" className="pref-chip-button" onClick={window.pawpal.resetToday}>
+            <button type="button" className="pref-chip-button" onClick={window.fufu.resetToday}>
               {labels.resetToday}
             </button>
           </div>
@@ -728,7 +728,7 @@ export function SettingsView(): JSX.Element {
                 <button
                   type="button"
                   className="pref-button is-primary"
-                  onClick={window.pawpal.openReleaseNotes}
+                  onClick={window.fufu.openReleaseNotes}
                 >
                   {labels.openReleaseNotes}
                 </button>
@@ -739,7 +739,7 @@ export function SettingsView(): JSX.Element {
         <Row
           label={labels.releaseNotes}
           control={
-            <button type="button" className="pref-button" onClick={window.pawpal.openReleaseNotes}>
+            <button type="button" className="pref-button" onClick={window.fufu.openReleaseNotes}>
               {labels.openReleaseNotes}
             </button>
           }
@@ -981,7 +981,7 @@ function DemoChip({ trigger, label }: { trigger: DemoTrigger; label: string }): 
     <button
       type="button"
       className="pref-chip-button"
-      onClick={() => window.pawpal.triggerDemo(trigger)}
+      onClick={() => window.fufu.triggerDemo(trigger)}
     >
       {label}
     </button>

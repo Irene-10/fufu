@@ -40,7 +40,7 @@ const api = {
   triggerDemo: (trigger: DemoTrigger): void => ipcRenderer.send("demo:trigger", trigger),
   isPackaged: !process.defaultApp,
   assetUrl: (relativePath: string): string => {
-    return `pawpal-asset://asset/${encodeURIComponent(relativePath)}`;
+    return `fufu-asset://asset/${encodeURIComponent(relativePath)}`;
   },
   startFocus: (): void => ipcRenderer.send("focus:start"),
   stopFocus: (): void => ipcRenderer.send("focus:stop"),
@@ -58,6 +58,6 @@ const api = {
     onChannel("app:snapshot", callback)
 };
 
-contextBridge.exposeInMainWorld("pawpal", api);
+contextBridge.exposeInMainWorld("fufu", api);
 
-export type PawPalApi = typeof api;
+export type FufuApi = typeof api;

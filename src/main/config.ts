@@ -4,10 +4,10 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const APP_NAME = "PawPal";
-export const STORE_NAME = "pawpal";
-export const RELEASES_API_URL = "https://api.github.com/repos/zebangeth/PawPal/releases/latest";
-export const RELEASES_URL = "https://github.com/zebangeth/PawPal/releases";
+export const APP_NAME = "Fufu";
+export const STORE_NAME = "fufu";
+export const RELEASES_API_URL = "https://api.github.com/repos/Irene-10/fufu/releases/latest";
+export const RELEASES_URL = "https://github.com/Irene-10/fufu/releases";
 
 export const PET_WINDOW = {
   width: 220,

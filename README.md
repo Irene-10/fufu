@@ -1,15 +1,15 @@
 <p align="center">
-  <img src="docs/social-preview.png" alt="PawPal" width="800" />
+  <img src="docs/social-preview.png" alt="Fufu" width="800" />
 </p>
 
-<h1 align="center">PawPal</h1>
+<h1 align="center">Fufu</h1>
 
 <p align="center">
   一只住在你桌面上的小狗，提醒你休息、喝水、保持专注。
 </p>
 
 <p align="center">
-  <a href="https://tooomm.github.io/github-release-stats/?username=zebangeth&repository=PawPal"><img alt="Downloads" src="https://img.shields.io/github/downloads/zebangeth/PawPal/total?style=flat-square&label=downloads" /></a>
+  <a href="https://github.com/Irene-10/fufu/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/Irene-10/fufu/total?style=flat-square&label=downloads" /></a>
   <img alt="Electron" src="https://img.shields.io/badge/Electron-vite-47848f?style=flat-square&logo=electron&logoColor=white" />
   <img alt="React" src="https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=111111" />
   <img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" />
@@ -21,7 +21,7 @@
 
 ## 中文
 
-PawPal 是一个桌面宠物应用，支持 macOS 和 Windows。一只透明、始终置顶的小狗会陪在你的屏幕上，在你久坐、忘记喝水或者分心刷社交媒体时，温柔地把你带回节奏里。
+Fufu 是一个桌面宠物应用，支持 macOS 和 Windows。一只透明、始终置顶的小狗会陪在你的屏幕上，在你久坐、忘记喝水或者分心刷社交媒体时，温柔地把你带回节奏里。
 
 ## 功能
 
@@ -58,9 +58,9 @@ PawPal 是一个桌面宠物应用，支持 macOS 和 Windows。一只透明、�
 
 | 文件 | 适用设备 |
 |------|---------|
-| `PawPal-x.x.x-arm64.dmg` | macOS Apple Silicon (M系列芯片) |
-| `PawPal-x.x.x-x64.dmg` | macOS Intel |
-| `PawPal.Setup.x.x.x.exe` | Windows (64-bit) |
+| `Fufu-x.x.x-arm64.dmg` | macOS Apple Silicon (M系列芯片) |
+| `Fufu-x.x.x-x64.dmg` | macOS Intel |
+| `Fufu.Setup.x.x.x.exe` | Windows (64-bit) |
 
 > **macOS**：首次打开时可能提示"无法验证开发者"，请在 系统设置 → 隐私与安全性 中允许打开。专注模式的分心检测需要授予 Accessibility 权限。
 >
@@ -72,8 +72,8 @@ PawPal 是一个桌面宠物应用，支持 macOS 和 Windows。一只透明、�
 
 ```bash
 corepack enable
-git clone https://github.com/zebangeth/PawPal.git
-cd PawPal
+git clone https://github.com/Irene-10/fufu.git
+cd fufu
 pnpm install
 pnpm dev
 ```
@@ -129,7 +129,7 @@ pet_assets/     宠物动画素材（GIF）
 
 A tiny desktop dog that helps you pause before you burn out.
 
-PawPal is a desktop pet app for macOS and Windows. A transparent, always-on-top dog lives on your screen and gently reminds you to take breaks, drink water, and stay focused.
+Fufu is a desktop pet app for macOS and Windows. A transparent, always-on-top dog lives on your screen and gently reminds you to take breaks, drink water, and stay focused.
 
 ### Features
 
@@ -139,7 +139,7 @@ PawPal is a desktop pet app for macOS and Windows. A transparent, always-on-top 
 - **Focus mode** — detects what app you're using; if you're on social media, the dog will nudge you back to work
 - **Multiple pet styles** — line-drawing dog and golden retriever puppy
 - **Chinese / English UI**
-- **Local-first data** — settings and stats stay on your machine; PawPal only contacts GitHub Releases when you manually check for updates or opt in to launch-time checks
+- **Local-first data** — settings and stats stay on your machine; Fufu only contacts GitHub Releases when you manually check for updates or opt in to launch-time checks
 
 ### Daily routine
 
@@ -164,8 +164,8 @@ Download the latest installer from [Releases](../../releases) (`.dmg` for macOS,
 
 ```bash
 corepack enable
-git clone https://github.com/zebangeth/PawPal.git
-cd PawPal
+git clone https://github.com/Irene-10/fufu.git
+cd fufu
 pnpm install
 pnpm dev
 ```

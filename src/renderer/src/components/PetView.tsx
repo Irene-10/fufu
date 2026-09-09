@@ -58,9 +58,9 @@ export function PetView(): JSX.Element {
   const labels = i18n(resolveLanguage(snapshot.settings.language)).settings;
 
   useEffect(() => {
-    const offBubble = window.pawpal.onShowBubble(setBubble);
-    const offHide = window.pawpal.onHideBubble(() => setBubble(null));
-    const offPetState = window.pawpal.onPetState(() => setStateSignal((current) => current + 1));
+    const offBubble = window.fufu.onShowBubble(setBubble);
+    const offHide = window.fufu.onHideBubble(() => setBubble(null));
+    const offPetState = window.fufu.onPetState(() => setStateSignal((current) => current + 1));
     return () => {
       offBubble();
       offHide();
@@ -69,7 +69,7 @@ export function PetView(): JSX.Element {
   }, []);
 
   const state = snapshot.petState;
-  const altText = `PawPal ${state}`;
+  const altText = `Fufu ${state}`;
   const facingClass = snapshot.petFacing === "left" ? "facing-left" : "facing-right";
   const appearanceId = snapshot.settings.petAppearanceId;
   const customAppearance = snapshot.settings.customPetAppearance;
@@ -80,16 +80,16 @@ export function PetView(): JSX.Element {
     if (!drag) return;
     dragRef.current = null;
     if (drag.dragging) {
-      window.pawpal.petDragStop();
+      window.fufu.petDragStop();
       return;
     }
-    if (clicked) window.pawpal.petClicked();
+    if (clicked) window.fufu.petClicked();
   }
 
   function setMouseInteractive(interactive: boolean): void {
     if (mouseInteractiveRef.current === interactive) return;
     mouseInteractiveRef.current = interactive;
-    window.pawpal.setMouseInteractive(interactive);
+    window.fufu.setMouseInteractive(interactive);
   }
 
   function updateMouseInteractivity(point: { x: number; y: number } | null): void {
@@ -160,7 +160,7 @@ export function PetView(): JSX.Element {
       window.removeEventListener("pointerup", cancelActiveDrag);
       window.removeEventListener("pointercancel", cancelActiveDrag);
       window.removeEventListener("blur", cancelActiveDrag);
-      window.pawpal.setMouseInteractive(true);
+      window.fufu.setMouseInteractive(true);
     };
   }, []);
 
@@ -186,7 +186,7 @@ export function PetView(): JSX.Element {
     const distance = Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY);
     if (!drag.dragging && distance > DRAG_START_DISTANCE_PX) {
       drag.dragging = true;
-      window.pawpal.petDragStart({ offsetX: drag.startX, offsetY: drag.startY });
+      window.fufu.petDragStart({ offsetX: drag.startX, offsetY: drag.startY });
     }
   }
 
@@ -209,10 +209,10 @@ export function PetView(): JSX.Element {
   return (
     <main
       className="pet-shell"
-      aria-label="PawPal desktop pet"
+      aria-label="Fufu desktop pet"
       onContextMenu={(event) => {
         event.preventDefault();
-        window.pawpal.petContextMenu();
+        window.fufu.petContextMenu();
       }}
     >
       {bubble ? (
@@ -224,7 +224,7 @@ export function PetView(): JSX.Element {
                 <button
                   className={`bubble-button ${action.kind ?? "secondary"}`}
                   key={action.id}
-                  onClick={() => window.pawpal.bubbleAction(action.id)}
+                  onClick={() => window.fufu.bubbleAction(action.id)}
                   type="button"
                 >
                   {action.label}

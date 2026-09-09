@@ -953,7 +953,7 @@ function setUpdateCheck(next: UpdateCheckResult): void {
 
 function openReleaseNotes(): void {
   void shell.openExternal(updateCheck.releaseUrl || RELEASES_URL).catch((error) => {
-    console.error("Failed to open PawPal releases:", error);
+    console.error("Failed to open Fufu releases:", error);
   });
 }
 
@@ -1229,11 +1229,11 @@ function registerIpc(): void {
 }
 
 protocol.registerSchemesAsPrivileged([
-  { scheme: "pawpal-asset", privileges: { bypassCSP: true, supportFetchAPI: true } }
+  { scheme: "fufu-asset", privileges: { bypassCSP: true, supportFetchAPI: true } }
 ]);
 
 app.whenReady().then(() => {
-  protocol.handle("pawpal-asset", (request) => {
+  protocol.handle("fufu-asset", (request) => {
     let relativePath = "";
     try {
       const url = new URL(request.url);

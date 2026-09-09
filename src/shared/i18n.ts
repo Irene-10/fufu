@@ -78,7 +78,7 @@ export const I18N = {
       ],
       updateAvailable: [
         (version: string) => `发现新版本 ${version}，去看看更新吧`,
-        (version: string) => `PawPal 有新版本 ${version} 啦`
+        (version: string) => `Fufu 有新版本 ${version} 啦`
       ]
     },
     actions: {
@@ -106,9 +106,9 @@ export const I18N = {
     },
     settings: {
       title: "设置",
-      welcomeTitle: "欢迎使用 PawPal",
+      welcomeTitle: "欢迎使用 Fufu",
       welcomeCopy:
-        "PawPal 会住在菜单栏和屏幕底部，定时提醒你休息、喝水和保持专注。分心检测目前仅支持 macOS，需要在系统设置里允许辅助功能权限。",
+        "Fufu 会住在菜单栏和屏幕底部，定时提醒你休息、喝水和保持专注。分心检测目前仅支持 macOS，需要在系统设置里允许辅助功能权限。",
       dismissWelcome: "知道了",
       appearance: "外观",
       system: "系统",
@@ -254,7 +254,7 @@ export const I18N = {
       detectionOffHelp: "分心检测已关闭。开启后保存，即可预览当前活动窗口。",
       detectionWaitingHelp: "正在等待第一次活动窗口检查。",
       detectionPermissionHelp:
-        "需要在系统设置里允许 PawPal 获取辅助功能权限（macOS），然后重启应用或重新开启分心检测。",
+        "需要在系统设置里允许 Fufu 获取辅助功能权限（macOS），然后重启应用或重新开启分心检测。",
       detectionUnsupportedHelp: "当前系统暂不支持活动窗口检测，分心检测会保持关闭状态。",
       detectionErrorHelp: "活动窗口检测暂时失败。请检查权限后，重新开启分心检测或重启应用。",
       detectionPreviewHelp: "正在预览当前活动窗口。开始专注后，命中规则会触发分心提醒。",
@@ -328,7 +328,7 @@ export const I18N = {
       ],
       updateAvailable: [
         (version: string) => `Version ${version} is available. Want to see what's new?`,
-        (version: string) => `PawPal has a new version: ${version}.`
+        (version: string) => `Fufu has a new version: ${version}.`
       ]
     },
     actions: {
@@ -356,9 +356,9 @@ export const I18N = {
     },
     settings: {
       title: "Settings",
-      welcomeTitle: "Welcome to PawPal",
+      welcomeTitle: "Welcome to Fufu",
       welcomeCopy:
-        "PawPal lives in the menu bar and near the bottom of your screen. It reminds you to take breaks, drink water, and stay focused. Distraction detection is macOS-only and requires accessibility permissions.",
+        "Fufu lives in the menu bar and near the bottom of your screen. It reminds you to take breaks, drink water, and stay focused. Distraction detection is macOS-only and requires accessibility permissions.",
       dismissWelcome: "Got it",
       appearance: "Appearance",
       system: "System",
@@ -374,7 +374,7 @@ export const I18N = {
       checkingUpdates: "Checking…",
       updateCheckOnLaunch: "Check Updates on Launch",
       updateCheckOnLaunchHelp:
-        "When enabled, PawPal checks the latest GitHub Release on startup. Otherwise it only checks when you ask.",
+        "When enabled, Fufu checks the latest GitHub Release on startup. Otherwise it only checks when you ask.",
       updateIdle: "Updates have not been checked yet.",
       updateAvailable: (version: string) => `Version ${version} is available.`,
       updateCurrent: (version: string) => `You are on the latest version ${version}.`,
@@ -507,7 +507,7 @@ export const I18N = {
       detectionOffHelp: "Detection is off. Enable it and Save to preview the active window.",
       detectionWaitingHelp: "Waiting for the first active-window check.",
       detectionPermissionHelp:
-        "Allow PawPal accessibility permissions in System Settings (macOS), then restart the app or toggle detection again.",
+        "Allow Fufu accessibility permissions in System Settings (macOS), then restart the app or toggle detection again.",
       detectionUnsupportedHelp:
         "Active-window detection is not supported on this system yet, so distraction detection will stay inactive.",
       detectionErrorHelp:

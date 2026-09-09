@@ -1,5 +1,5 @@
 {
-  "name": "pawpal",
+  "name": "fufu",
   "version": "0.3.1",
   "description": "A tiny desktop dog that helps you pause before you burn out.",
   "author": "zebangeth",
@@ -17,8 +17,8 @@
     "dist:win": "tsc --noEmit && electron-vite build && electron-builder --win"
   },
   "build": {
-    "appId": "com.pawpal.app",
-    "productName": "PawPal",
+    "appId": "com.fufu.app",
+    "productName": "Fufu",
     "mac": {
       "category": "public.app-category.productivity",
       "target": [
@@ -41,7 +41,7 @@
       "allowToChangeInstallationDirectory": true
     },
     "dmg": {
-      "title": "PawPal",
+      "title": "Fufu",
       "contents": [
         { "x": 130, "y": 220 },
         { "x": 410, "y": 220, "type": "link", "path": "/Applications" }

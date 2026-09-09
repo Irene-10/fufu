@@ -1,6 +1,6 @@
 # Asset Licensing
 
-PawPal separates source code licensing from pet animation asset licensing.
+Fufu separates source code licensing from pet animation asset licensing.
 
 ## Source Code
 

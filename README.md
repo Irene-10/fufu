@@ -19,7 +19,7 @@ Fufu 是一个 macOS 与 Windows 桌面宠物实验：小狗会按照现实时�
 | --- | --- |
 | Windows 10/11 64 位 | `Fufu.Setup.x.x.x.exe` |
 | Apple 芯片 Mac（M1/M2/M3/M4/M5） | `Fufu-x.x.x-arm64.dmg` |
-| Intel 芯片 Mac | `Fufu-x.x.x-x64.dmg` |
+| Intel 芯片 Mac | `Fufu-x.x.x.dmg` |
 
 Windows 双击 `.exe` 安装；Mac 打开 `.dmg` 后，将 Fufu 拖入 Applications。
 

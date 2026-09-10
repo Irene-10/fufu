@@ -88,6 +88,14 @@ export const tests = [
     }
   },
   {
+    name: "Line Dog routine states provide multiple random variants",
+    run: () => {
+      for (const state of ["idle", "working", "eating", "exercising", "reading", "sleeping"] as PetState[]) {
+        assert.ok(pathsFor("lineDog", state).length >= 2, `${state} should have at least two variants`);
+      }
+    }
+  },
+  {
     name: "Xiao Ji Mao asset paths exist for all pet states",
     run(): void {
       for (const state of petStates) {

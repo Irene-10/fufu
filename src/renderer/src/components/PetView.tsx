@@ -22,7 +22,7 @@ const CONTINUOUS_ASSET_STATES = new Set<PetState>([
   "reading",
   "sleeping"
 ]);
-const CONTINUOUS_ASSET_ROTATION_MS = 15 * 60 * 1000;
+const CONTINUOUS_ASSET_ROTATION_MS = 5 * 60 * 1000;
 const DRAG_START_DISTANCE_PX = 10;
 const PET_BUTTON_SELECTOR = ".pet-button";
 const BUBBLE_INTERACTIVE_SELECTOR = ".speech-bubble";

@@ -188,7 +188,38 @@ export const PET_APPEARANCES: Record<BuiltInPetAppearanceId, PetAppearanceManife
         ]
       },
       sleeping: {
-        path: lineDog("sleeping", "线条小狗第12弹_困.gif")
+        path: [
+          lineDog("sleeping", "线条小狗第12弹_困.gif"),
+          lineDog("idle", "线条小狗第1弹_摆烂.gif")
+        ]
+      },
+      working: {
+        path: [
+          lineDog("focusGuard", "线条小狗第17弹_工作.gif"),
+          lineDog("focusGuard", "线条小狗第2弹_努力.gif"),
+          lineDog("focusGuard", "线条小狗第9弹_甩耳朵.gif")
+        ]
+      },
+      eating: {
+        path: [
+          lineDog("drinking", "线条小狗第19弹_喝咖啡.gif"),
+          lineDog("hydrationPrompt", "线条小狗第2弹_快点.gif"),
+          lineDog("hydrationDone", "线条小狗第12弹_好棒.gif")
+        ]
+      },
+      exercising: {
+        path: [
+          lineDog("breakRunning", "线条小狗第1弹_啦啦啦.gif"),
+          lineDog("breakRunning", "线条小狗第1弹_来了.gif"),
+          lineDog("breakPrompt", "线条小狗第5弹_出去玩.gif")
+        ]
+      },
+      reading: {
+        path: [
+          lineDog("idle", "线条小狗第12弹_晃脚脚.gif"),
+          lineDog("idle", "线条小狗第12弹_无聊.gif"),
+          lineDog("focusGuard", "线条小狗第2弹_努力.gif")
+        ]
       }
     }
   },

@@ -1,0 +1,150 @@
+export type Language = "zh-CN" | "en";
+
+export type BuiltInPetAppearanceId = "lovartPuppy" | "lineDog" | "xiaoJiMao";
+
+export type PetAppearanceId = BuiltInPetAppearanceId | "custom";
+
+export type PetFacing = "left" | "right";
+
+export type PetState =
+  | "idle"
+  | "sitting"
+  | "happy"
+  | "breakPrompt"
+  | "breakRunning"
+  | "breakDone"
+  | "hydrationPrompt"
+  | "drinking"
+  | "hydrationDone"
+  | "focusGuard"
+  | "focusAlert"
+  | "focusDone"
+  | "sad"
+  | "sleeping"
+  | "working"
+  | "eating"
+  | "exercising"
+  | "reading";
+
+export type CustomPetAsset = {
+  relativePath: string;
+  originalName: string;
+  updatedAt: number;
+};
+
+export type CustomPetAppearance = {
+  name: string;
+  assets: Partial<Record<PetState, CustomPetAsset>>;
+};
+
+export type BubbleAction = {
+  id: string;
+  label: string;
+  kind?: "primary" | "secondary" | "danger";
+};
+
+export type SpeechBubble = {
+  id: string;
+  message: string;
+  actions?: BubbleAction[];
+  autoDismissMs?: number;
+};
+
+export type BlockingMode = "break" | "breakRun" | "hydration" | "focusWarning" | null;
+
+export type Settings = {
+  language: Language;
+  petAppearanceId: PetAppearanceId;
+  customPetAppearance: CustomPetAppearance | null;
+  onboardingDismissed: boolean;
+  launchAtLoginEnabled: boolean;
+  checkUpdatesOnLaunchEnabled: boolean;
+  dailyRoutineEnabled: boolean;
+  breakReminderEnabled: boolean;
+  breakIntervalMinutes: number;
+  breakRunDurationSeconds: number;
+  hydrationReminderEnabled: boolean;
+  hydrationIntervalMinutes: number;
+  focusDurationMinutes: number;
+  distractionDetectionEnabled: boolean;
+  distractionGraceSeconds: number;
+  distractionBlockedApps: string[];
+  distractionBlockedKeywords: string[];
+};
+
+export type TodayStats = {
+  date: string;
+  breaksTaken: number;
+  watersLogged: number;
+  focusMinutes: number;
+  focusWarnings: number;
+};
+
+export type StatsHistory = Record<string, TodayStats>;
+
+export type TimerStatus = {
+  breakDueAt: number | null;
+  hydrationDueAt: number | null;
+  focusEndsAt: number | null;
+};
+
+export type DistractionStatus = {
+  state: "idle" | "watching" | "permission-needed" | "unsupported" | "error";
+  activeApp: string;
+  activeWindowTitle: string;
+  matchedRule: string | null;
+  lastCheckedAt: number | null;
+  lastWarningAt: number | null;
+  error: string | null;
+};
+
+export type AppSnapshot = {
+  appInfo: AppInfo;
+  updateCheck: UpdateCheckResult;
+  settings: Settings;
+  stats: TodayStats;
+  statsHistory: StatsHistory;
+  timers: TimerStatus;
+  distraction: DistractionStatus;
+  petState: PetState;
+  petFacing: PetFacing;
+  blockingMode: BlockingMode;
+  focusActive: boolean;
+  dogVisible: boolean;
+};
+
+export type AppInfo = {
+  version: string;
+  releaseNotesUrl: string;
+};
+
+export type UpdateCheckStatus =
+  | "idle"
+  | "checking"
+  | "available"
+  | "up-to-date"
+  | "error";
+
+export type UpdateCheckResult = {
+  status: UpdateCheckStatus;
+  currentVersion: string;
+  latestVersion: string | null;
+  releaseUrl: string;
+  checkedAt: number | null;
+  error: string | null;
+};
+
+export type DemoTrigger =
+  | "break"
+  | "hydration"
+  | "focusWarning"
+  | "happy";
+
+export type RendererEventMap = {
+  "pet:set-state": PetState;
+  "pet:show-bubble": SpeechBubble;
+  "pet:hide-bubble": void;
+  "settings:updated": Settings;
+  "stats:updated": TodayStats;
+  "app:snapshot": AppSnapshot;
+};

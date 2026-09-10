@@ -1,187 +1,103 @@
 <p align="center">
-  <img src="docs/social-preview.png" alt="Fufu" width="800" />
+  <img src="docs/social-preview.png" alt="Fufu 桌面宠物" width="800" />
 </p>
 
 <h1 align="center">Fufu</h1>
 
-<p align="center">
-  一只住在你桌面上的小狗，提醒你休息、喝水、保持专注。
-</p>
+<p align="center">把一天借给一只认真生活的小狗。</p>
 
-<p align="center">
-  <a href="https://github.com/Irene-10/fufu/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/Irene-10/fufu/total?style=flat-square&label=downloads" /></a>
-  <img alt="Electron" src="https://img.shields.io/badge/Electron-vite-47848f?style=flat-square&logo=electron&logoColor=white" />
-  <img alt="React" src="https://img.shields.io/badge/React-19-61dafb?style=flat-square&logo=react&logoColor=111111" />
-  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" />
-</p>
+Fufu 是一个 Windows 桌面宠物实验：小狗会按照现实时间起床、工作、吃饭、午休、运动和阅读。它不是一张贴在桌面的日程表，而是用持续可见的状态，让你在走神时自然想起“现在该做什么”。
 
-<p align="center">
-  <a href="#中文">中文</a> · <a href="#english">English</a>
-</p>
+> 当前是个人开发的早期试用版。数据保存在本机，不需要注册账号。
 
-## 中文
+## 下载与安装
 
-Fufu 是一个桌面宠物应用，支持 macOS 和 Windows。一只透明、始终置顶的小狗会陪在你的屏幕上，在你久坐、忘记喝水或者分心刷社交媒体时，温柔地把你带回节奏里。
+1. 打开 [Releases](https://github.com/Irene-10/fufu/releases)，进入最新版本。
+2. 下载 `Fufu Setup x.x.x.exe`。
+3. 双击安装，安装完成后从开始菜单打开 Fufu。
 
-## 功能
+目前只提供 Windows 10/11 64 位安装包。安装包尚未购买商业代码签名证书，因此 Windows 可能显示“未知发布者”；请只从本仓库的 Releases 页面下载。
 
-- **固定作息** — 小狗按照电脑本地时间自动工作、吃饭、午睡、运动、看书和睡觉
-- **休息提醒** — 定时提醒你站起来活动一下，小狗会跑过整个屏幕引起你的注意
-- **喝水提醒** — 别忘了喝水
-- **专注模式** — 检测你当前在用的 app，如果你在刷社交媒体，小狗会来提醒你回去工作
-- **多种宠物外观** — 目前有线条小狗和金毛 puppy 两种风格
-- **中文 / English** — 支持中英文切换
-- **本地优先** — 设置和统计数据保存在本地；只有手动检查更新或开启启动时检查更新时才会访问 GitHub Releases
+## Fufu 的一天
 
-### 小狗的每日作息
+Fufu 默认读取电脑的本地时间并执行这份作息：
 
-固定作息默认开启，可在设置中关闭。休息提醒、喝水提醒和专注模式会暂时覆盖作息动画，结束后小狗会回到当前时间对应的状态。
-
-| 时间 | 状态 |
-|------|------|
+| 时间 | 它在做什么 |
+| --- | --- |
 | 23:00–07:00 | 睡觉 |
-| 07:00–08:00 | 默认状态 |
+| 07:00–08:00 | 起床、自由活动 |
 | 08:00–12:00 | 工作 |
 | 12:00–13:00 | 吃饭 |
-| 13:00–14:00 | 午睡 |
+| 13:00–14:00 | 午休 |
 | 14:00–18:00 | 工作 |
 | 18:00–19:00 | 吃饭 |
-| 19:00–20:00 | 默认状态 |
+| 19:00–20:00 | 自由活动 |
 | 20:00–21:00 | 运动 |
 | 21:00–23:00 | 看书 |
 
-## 安装
+长期状态会从多个线条小狗动画中随机选择，并每 5 分钟轮换一次，避免一直重复同一个动作。固定作息可以在设置中关闭。
 
-### 下载安装包（推荐）
+## 你可以怎样使用它
 
-从 [Releases](../../releases) 页面下载对应平台的安装包：
+- 跟随作息：看到 Fufu 开始工作、吃饭或运动时，把它当作转换活动的轻提醒。
+- 开启专注模式：设置一段专注时间；若检测到分心应用，Fufu 会提醒你回来。
+- 设置休息和喝水提醒：到点后通过动画和气泡提醒你。
+- 拖动小狗：把它放在不遮挡工作的屏幕角落。
+- 右键小狗或托盘图标：打开设置、切换显示状态或退出。
 
-| 文件 | 适用设备 |
-|------|---------|
-| `Fufu-x.x.x-arm64.dmg` | macOS Apple Silicon (M系列芯片) |
-| `Fufu-x.x.x-x64.dmg` | macOS Intel |
-| `Fufu.Setup.x.x.x.exe` | Windows (64-bit) |
+提醒、喝水和专注动画会暂时覆盖日常作息；事件结束后，Fufu 会回到当前时段应该呈现的状态。
 
-> **macOS**：首次打开时可能提示"无法验证开发者"，请在 系统设置 → 隐私与安全性 中允许打开。专注模式的分心检测需要授予 Accessibility 权限。
->
-> **Windows**：分心检测功能暂不可用（目前仅支持 macOS），其他功能正常。
+## 当前版本的边界
 
-### 从源码运行
+- 时间表暂时固定，不能自定义工作日和周末。
+- Windows 上暂不支持分心应用检测，专注倒计时仍可使用。
+- 没有云端同步、社交功能或养成数值系统。
+- 这是未签名的测试版本，建议先在非关键设备上体验并及时反馈问题。
 
-需要 Node.js 24+ 和 pnpm 11。推荐通过 Corepack 启用 pnpm（版本以 `package.json` 的 `packageManager` 为准）：
+## 隐私
+
+设置、提醒记录和统计数据保存在本机。Fufu 只会在你主动检查更新，或启用“启动时检查更新”后访问本仓库的 GitHub Releases。
+
+## 反馈
+
+发现问题或有建议时，请在 [Issues](https://github.com/Irene-10/fufu/issues) 新建一条记录，并尽量附上 Windows 版本、复现步骤和截图。
+
+## 本地开发
+
+需要 Node.js 24+ 与 pnpm 11：
 
 ```bash
-corepack enable
 git clone https://github.com/Irene-10/fufu.git
 cd fufu
+corepack enable
 pnpm install
 pnpm dev
 ```
 
-如果 `corepack enable` 没有权限，请用其他方式安装 pnpm 11，并确认 `pnpm --version` 可以正常运行。
-
-## 构建
+常用命令：
 
 ```bash
-pnpm test         # 运行纯逻辑测试
-pnpm build        # 编译（含类型检查）
-pnpm dist         # 编译 + 打包 macOS 和 Windows
-pnpm dist:mac     # 仅打包 macOS
-pnpm dist:win     # 仅打包 Windows（需要 Wine 或在 Windows 上运行）
+pnpm test       # 运行逻辑测试
+pnpm typecheck  # TypeScript 类型检查
+pnpm build      # 生产构建
+pnpm dist:win   # 生成 Windows 安装包
 ```
 
-> 本地打包时请确保 `pnpm` 命令可以在 shell 中直接运行；electron-builder 会用它收集依赖。
+## 代码地图
 
-## 技术栈
-
-- Electron + electron-vite
-- React 19 + TypeScript
-- electron-store（本地持久化）
-- electron-builder（打包分发）
-
-## 项目结构
-
-```
-src/main/       主进程：窗口管理、托盘菜单、定时器、持久化、专注检测、更新检查
-src/preload/    IPC 桥接层
-src/renderer/   React UI（宠物窗口 + 设置窗口）
-src/shared/     共享类型、固定作息、默认配置、i18n、宠物外观定义
-tests/          纯逻辑测试
-pet_assets/     宠物动画素材（GIF）
+```text
+src/main/       Electron 主进程：窗口、托盘、计时器和本地存储
+src/preload/    主进程与界面之间的安全桥接
+src/renderer/   React 界面：桌面宠物与设置页
+src/shared/     作息规则、类型、文案和宠物动画映射
+pet_assets/     内置 GIF 动画
+tests/          时间表、设置、窗口定位等逻辑测试
 ```
 
-## 开发路线
+技术栈为 Electron、React 19、TypeScript、electron-store 和 electron-builder。
 
-- [x] 固定的小狗每日作息
-- [ ] 可编辑的工作日/周末时间表
-- [ ] 更多宠物外观
-- [ ] 声音效果
-- [ ] Windows 分心检测
-- [ ] 多显示器适配优化
+## 来源与许可
 
-## 许可
+Fufu 的初始桌面宠物能力基于 [PawPal](https://github.com/zebangeth/PawPal) 继续开发，新增了固定作息、Fufu 品牌与时间表动画轮换等功能。
 
-源代码基于 [MIT License](LICENSE)。宠物动画素材有独立的授权说明，详见 [ASSET_LICENSE.md](ASSET_LICENSE.md)。
-
----
-
-## English
-
-A tiny desktop dog that helps you pause before you burn out.
-
-Fufu is a desktop pet app for macOS and Windows. A transparent, always-on-top dog lives on your screen and gently reminds you to take breaks, drink water, and stay focused.
-
-### Features
-
-- **Fixed daily routine** — the dog automatically works, eats, naps, exercises, reads, and sleeps using your computer's local time
-- **Break reminders** — timed nudges to get up and move; the dog runs across your screen to get your attention
-- **Hydration reminders** — don't forget to drink water
-- **Focus mode** — detects what app you're using; if you're on social media, the dog will nudge you back to work
-- **Multiple pet styles** — line-drawing dog and golden retriever puppy
-- **Chinese / English UI**
-- **Local-first data** — settings and stats stay on your machine; Fufu only contacts GitHub Releases when you manually check for updates or opt in to launch-time checks
-
-### Daily routine
-
-The routine is enabled by default and can be disabled in Settings. Break, hydration, and Focus states temporarily take priority; the dog returns to the current scheduled state afterward.
-
-| Time | State |
-|------|------|
-| 23:00–07:00 | Sleeping |
-| 07:00–08:00 | Idle |
-| 08:00–12:00 | Working |
-| 12:00–13:00 | Eating |
-| 13:00–14:00 | Napping |
-| 14:00–18:00 | Working |
-| 18:00–19:00 | Eating |
-| 19:00–20:00 | Idle |
-| 20:00–21:00 | Exercising |
-| 21:00–23:00 | Reading |
-
-### Install
-
-Download the latest installer from [Releases](../../releases) (`.dmg` for macOS, `.exe` for Windows), or run from source:
-
-```bash
-corepack enable
-git clone https://github.com/Irene-10/fufu.git
-cd fufu
-pnpm install
-pnpm dev
-```
-
-Source builds require Node.js 24+ and pnpm 11 (see `packageManager` in `package.json`). Make sure the `pnpm` command is available in your shell before packaging, because electron-builder uses it while collecting dependencies.
-
-If `corepack enable` does not have permission to install shims, install pnpm 11 another way and verify that `pnpm --version` works.
-
-Common commands:
-
-```bash
-pnpm test
-pnpm build
-pnpm dist
-```
-
-### License
-
-Source code under [MIT License](LICENSE). Pet animation assets have separate licensing; see [ASSET_LICENSE.md](ASSET_LICENSE.md).
+程序源代码遵循 [MIT License](LICENSE)。`pet_assets/` 下的动画与源代码分开授权，详情见 [ASSET_LICENSE.md](ASSET_LICENSE.md)；在确认每组素材的原始授权前，请勿将这些动画单独提取、二次发布或用于商业用途。

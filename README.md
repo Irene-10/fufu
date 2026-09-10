@@ -21,9 +21,24 @@ Fufu 是一个 macOS 与 Windows 桌面宠物实验：小狗会按照现实时�
 | Apple 芯片 Mac（M1/M2/M3/M4/M5） | `Fufu-x.x.x-arm64.dmg` |
 | Intel 芯片 Mac | `Fufu-x.x.x.dmg` |
 
-Windows 双击 `.exe` 安装；Mac 打开 `.dmg` 后，将 Fufu 拖入 Applications。
+Windows 双击 `.exe` 安装；Mac 打开 `.dmg` 后，将 Fufu 拖入“应用程序”（Applications）。
 
-当前安装包尚未购买商业代码签名证书。Windows 可能显示“未知发布者”；macOS 首次打开可能被 Gatekeeper 阻止，需要在 Finder 中右键 Fufu 选择“打开”，或前往“系统设置 → 隐私与安全性”确认打开。请只从本仓库的 Releases 页面下载。
+### macOS 首次打开
+
+Fufu 目前是未签名、未经过 Apple 公证的早期测试版，因此 macOS 可能提示“无法验证开发者”或“应用已损坏”。这通常是 Gatekeeper 对网络下载应用的隔离提示，并不代表 DMG 下载失败。请只对从本仓库 [Releases](https://github.com/Irene-10/fufu/releases) 下载的 Fufu 使用下面的方法。
+
+1. 先在 Finder 的“应用程序”中右键 Fufu，选择“打开”。
+2. 若仍被阻止，前往“系统设置 → 隐私与安全性”，找到关于 Fufu 的提示并选择“仍要打开”。
+3. 若依然显示“已损坏”，从同一 Release 下载 `Fufu-macOS-open-helper.zip`，解压后右键 `Open Fufu.command`，选择“打开”。辅助脚本只会核对并移除 `/Applications/Fufu.app` 的下载隔离标记，然后启动 Fufu；它不会关闭 Gatekeeper，也不会更改全局安全设置。
+
+如果辅助脚本无法运行，也可以打开“终端”，仅对已经拖入“应用程序”的 Fufu 执行：
+
+```bash
+xattr -dr com.apple.quarantine /Applications/Fufu.app
+open /Applications/Fufu.app
+```
+
+上述方法仅用于当前测试版。要让普通用户无需这些步骤，未来仍需使用 Apple Developer 证书完成签名和公证。Windows 版本也可能显示“未知发布者”。
 
 ## Fufu 的一天
 

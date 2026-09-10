@@ -27,6 +27,9 @@ const api = {
   importCustomPetAsset: (state: PetState, sourcePath: string): Promise<CustomPetAsset | null> =>
     ipcRenderer.invoke("custom-pet:import-asset", state, sourcePath),
   pathForFile: (file: File): string => webUtils.getPathForFile(file),
+  summonPet: (): void => ipcRenderer.send("pet:summon"),
+  setFollowCursor: (enabled: boolean): void => ipcRenderer.send("pet:follow-cursor", enabled),
+  petPointerDown: (): void => ipcRenderer.send("pet:pointer-down"),
   petClicked: (): void => ipcRenderer.send("pet:clicked"),
   petContextMenu: (): void => ipcRenderer.send("pet:context-menu"),
   petDragStart: (offset: { offsetX: number; offsetY: number }): void =>

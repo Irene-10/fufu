@@ -29,6 +29,10 @@ export function normalizeSettings(stored: Partial<Settings> = {}): Settings {
         ? DEFAULT_SETTINGS.petAppearanceId
         : petAppearanceId,
     customPetAppearance,
+    followCursorEnabled:
+      typeof stored.followCursorEnabled === "boolean"
+        ? stored.followCursorEnabled
+        : DEFAULT_SETTINGS.followCursorEnabled,
     dailyRoutineEnabled:
       typeof stored.dailyRoutineEnabled === "boolean"
         ? stored.dailyRoutineEnabled

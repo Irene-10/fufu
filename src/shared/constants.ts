@@ -8,6 +8,7 @@ export const DEFAULT_SETTINGS: Settings = {
   launchAtLoginEnabled: false,
   checkUpdatesOnLaunchEnabled: false,
   dailyRoutineEnabled: true,
+  followCursorEnabled: false,
   breakReminderEnabled: true,
   breakIntervalMinutes: 45,
   breakRunDurationSeconds: 60,

@@ -69,6 +69,7 @@ import {
   buildTrayMenuTemplate
 } from "./menus";
 import { createTrayImage } from "./trayIcon";
+import { canFollowCursor, cursorPetBounds, FOLLOW_TICK_MS, PetFollowController } from "./petMovement";
 import { getStoredSettings, normalizeSettings } from "./settingsStore";
 import {
   getCurrentStats,
@@ -137,6 +138,14 @@ let nextBreakRunTurnAt = 0;
 let breakMutedToday = false;
 let dragOffset: PetPosition = { x: 0, y: 0 };
 let petMouseInteractive = true;
+let followCursorEnabled = getSettings().followCursorEnabled;
+let followTimer: NodeJS.Timeout | null = null;
+let lastFollowTickAt = 0;
+const followController = new PetFollowController();
+let petMoving = false;
+let petPointerHeld = false;
+let petMenuOpen = false;
+let petBubbleVisible = false;
 let distractionStatus: DistractionStatus = {
   state: "idle",
   activeApp: "",
@@ -166,6 +175,8 @@ function setSettings(next: Settings): void {
   const normalized = normalizeSettings(next);
   applyLaunchAtLoginPreference(normalized.launchAtLoginEnabled);
   store.set("settings", normalized);
+  followCursorEnabled = normalized.followCursorEnabled;
+  syncFollowTimer();
   sendToAll("settings:updated", getSettingsWithSystemState());
   settingsWindow?.setTitle(`${APP_NAME} ${text().menu.settings}`);
   scheduleReminderTimers();
@@ -256,6 +267,7 @@ function snapshot(): AppSnapshot {
     distraction: distractionStatus,
     petState,
     petFacing,
+    petMoving,
     blockingMode,
     dogVisible: Boolean(petWindow?.isVisible()),
     focusActive
@@ -289,6 +301,7 @@ function publishSnapshot(): void {
 }
 
 function setPetState(next: PetState): void {
+  if (!isDailyRoutineState(next)) pausePetFollowing();
   petState = next;
   sendToAll("pet:set-state", next);
 }
@@ -342,6 +355,8 @@ function setPetFacing(next: PetFacing): void {
 }
 
 function showBubble(bubble: SpeechBubble): void {
+  petBubbleVisible = true;
+  pausePetFollowing();
   if (bubbleTimer) clearTimeout(bubbleTimer);
   sendToPet("pet:show-bubble", bubble);
   if (bubble.autoDismissMs) {
@@ -350,6 +365,7 @@ function showBubble(bubble: SpeechBubble): void {
 }
 
 function hideBubble(): void {
+  petBubbleVisible = false;
   if (bubbleTimer) {
     clearTimeout(bubbleTimer);
     bubbleTimer = null;
@@ -466,17 +482,20 @@ function createPetWindow(): void {
     publishSnapshot();
   });
   petWindow.on("show", () => {
+    syncFollowTimer();
     updateTrayMenu();
     publishSnapshot();
   });
   petWindow.on("hide", () => {
     stopPetDrag();
+    syncFollowTimer();
     updateTrayMenu();
     publishSnapshot();
   });
   petWindow.on("closed", () => {
     stopPetDrag();
     petWindow = null;
+    syncFollowTimer();
     updateTrayMenu();
     publishSnapshot();
   });
@@ -568,6 +587,7 @@ function menuState() {
   return {
     appName: APP_NAME,
     dogVisible: Boolean(petWindow?.isVisible()),
+    followCursorEnabled,
     focusActive,
     isPackaged: app.isPackaged
   };
@@ -577,6 +597,8 @@ function menuActions() {
   return {
     toggleDog: togglePetWindowVisibility,
     hideDog: hidePetWindowFromMenu,
+    summonPet,
+    toggleFollowCursor: () => setFollowCursorEnabled(!followCursorEnabled),
     startFocus: startFocusMode,
     stopFocusFromMenu: () => stopFocusMode(true),
     stopFocusFromContext: () => stopFocusMode(false),
@@ -588,25 +610,114 @@ function menuActions() {
 
 function updateApplicationMenu(): void {
   const labels = text().menu;
-  Menu.setApplicationMenu(
-    Menu.buildFromTemplate(buildApplicationMenuTemplate(labels, menuState(), menuActions()))
-  );
+  const menu = Menu.buildFromTemplate(buildApplicationMenuTemplate(labels, menuState(), menuActions()));
+  if (menu.items[0]?.submenu) trackPetMenu(menu.items[0].submenu);
+  Menu.setApplicationMenu(menu);
 }
 
 function updateTrayMenu(): void {
   updateApplicationMenu();
   if (!tray) return;
   const labels = text().menu;
-  tray.setContextMenu(
-    Menu.buildFromTemplate(buildTrayMenuTemplate(labels, menuState(), menuActions()))
-  );
+  const menu = Menu.buildFromTemplate(buildTrayMenuTemplate(labels, menuState(), menuActions()));
+  trackPetMenu(menu);
+  tray.setContextMenu(menu);
+}
+
+function trackPetMenu(menu: Menu): void {
+  menu.on("menu-will-show", () => {
+    petMenuOpen = true;
+    pausePetFollowing();
+  });
+  menu.on("menu-will-close", () => { petMenuOpen = false; });
 }
 
 function showPetContextMenu(): void {
+  stopPetDrag();
   const labels = text().menu;
-  Menu.buildFromTemplate(buildPetContextMenuTemplate(labels, menuState(), menuActions())).popup({
-    window: petWindow ?? undefined
-  });
+  const menu = Menu.buildFromTemplate(buildPetContextMenuTemplate(labels, menuState(), menuActions()));
+  trackPetMenu(menu);
+  menu.popup({ window: petWindow ?? undefined });
+}
+
+function pausePetFollowing(): void {
+  followController.reset();
+  if (!petMoving) return;
+  petMoving = false;
+  persistPetPosition();
+  publishSnapshot();
+}
+
+function movePetFollowingCursor(): void {
+  const now = performance.now();
+  const elapsedMs = now - lastFollowTickAt;
+  lastFollowTickAt = now;
+  if (!petWindow || petWindow.isDestroyed()) return;
+  if (!canFollowCursor({
+    enabled: followCursorEnabled,
+    visible: petWindow.isVisible(),
+    dragging: Boolean(dragTimer),
+    pointerDown: petPointerHeld,
+    menuOpen: petMenuOpen,
+    bubbleVisible: petBubbleVisible,
+    focusActive,
+    blockingMode
+  }) || !isDailyRoutineState(petState)) {
+    pausePetFollowing();
+    return;
+  }
+
+  // Electron screen points and window bounds both use DIP; do not multiply by scaleFactor.
+  const cursor = screen.getCursorScreenPoint();
+  const workArea = screen.getDisplayNearestPoint(cursor).workArea;
+  const bounds = petWindow.getBounds();
+  const frame = followController.step(bounds, cursor, workArea, elapsedMs, petFacing);
+  if (frame.bounds.x !== bounds.x || frame.bounds.y !== bounds.y) {
+    // Move only; resizing a transparent native window each tick is unnecessary.
+    petWindow.setPosition(frame.bounds.x, frame.bounds.y, false);
+  }
+  const changed = petMoving !== frame.moving || petFacing !== frame.facing;
+  if (petMoving && !frame.moving) persistPetPosition();
+  petMoving = frame.moving;
+  petFacing = frame.facing;
+  // Publish one coherent animation update, not a facing update followed by a state update.
+  if (changed) publishSnapshot();
+}
+
+function syncFollowTimer(): void {
+  followController.reset();
+  if (followTimer) clearInterval(followTimer);
+  followTimer = null;
+  if (followCursorEnabled && petWindow && !petWindow.isDestroyed() && petWindow.isVisible()) {
+    lastFollowTickAt = performance.now();
+    followTimer = setInterval(movePetFollowingCursor, FOLLOW_TICK_MS);
+  } else {
+    pausePetFollowing();
+  }
+}
+
+function setFollowCursorEnabled(enabled: boolean): void {
+  if (typeof enabled !== "boolean" || enabled === followCursorEnabled) return;
+  followCursorEnabled = enabled;
+  // Changing interaction mode must not reset reminder or focus timers.
+  store.set("settings", { ...getSettings(), followCursorEnabled: enabled });
+  syncFollowTimer();
+  if (!enabled) persistPetPosition();
+  sendToAll("settings:updated", getSettingsWithSystemState());
+  updateTrayMenu();
+  publishSnapshot();
+}
+
+function summonPet(): void {
+  stopPetDrag();
+  pausePetFollowing();
+  showPetWindowFromMenu();
+  if (!petWindow || petWindow.isDestroyed()) return;
+  const cursor = screen.getCursorScreenPoint();
+  const workArea = screen.getDisplayNearestPoint(cursor).workArea;
+  petWindow.setBounds(cursorPetBounds(cursor, PET_WINDOW, workArea), false);
+  persistPetPosition();
+  publishSnapshot();
 }
 
 function movePetWithCursor(): void {
@@ -635,6 +746,7 @@ function startPetDrag(offset: { offsetX: number; offsetY: number }): void {
 }
 
 function stopPetDrag(): void {
+  petPointerHeld = false;
   const wasDragging = Boolean(dragTimer || dragSafetyTimer);
   if (dragTimer) {
     clearInterval(dragTimer);
@@ -1210,6 +1322,14 @@ function registerIpc(): void {
     if (blockingMode) return;
     happyFeedback(null);
   });
+  ipcMain.on("pet:summon", summonPet);
+  ipcMain.on("pet:follow-cursor", (_event, enabled: boolean) => setFollowCursorEnabled(enabled));
+  ipcMain.on("pet:pointer-down", () => {
+    petPointerHeld = true;
+    pausePetFollowing();
+    if (dragSafetyTimer) clearTimeout(dragSafetyTimer);
+    dragSafetyTimer = setTimeout(stopPetDrag, 15_000);
+  });
   ipcMain.on("pet:context-menu", showPetContextMenu);
   ipcMain.on("pet:drag-start", (_event, offset: { offsetX: number; offsetY: number }) =>
     startPetDrag(offset)
@@ -1282,7 +1402,9 @@ app.whenReady().then(() => {
 });
 
 app.on("before-quit", () => {
+  persistPetPosition();
   for (const timer of [
+    followTimer,
     breakRunTimer,
     breakRunCountdownTimer,
     breakRunMovementTimer,

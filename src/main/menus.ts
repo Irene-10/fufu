@@ -6,6 +6,7 @@ type MenuLabels = I18nBundle["menu"];
 type MenuState = {
   appName: string;
   dogVisible: boolean;
+  followCursorEnabled: boolean;
   focusActive: boolean;
   isPackaged: boolean;
 };
@@ -13,6 +14,8 @@ type MenuState = {
 type MenuActions = {
   toggleDog: () => void;
   hideDog: () => void;
+  summonPet: () => void;
+  toggleFollowCursor: () => void;
   startFocus: () => void;
   stopFocusFromMenu: () => void;
   stopFocusFromContext: () => void;
@@ -34,6 +37,22 @@ function demoItems(
   ];
 }
 
+function interactionItems(
+  labels: MenuLabels,
+  state: MenuState,
+  actions: MenuActions
+): Electron.MenuItemConstructorOptions[] {
+  return [
+    { label: labels.summonPet, click: actions.summonPet },
+    {
+      label: labels.followCursor,
+      type: "checkbox",
+      checked: state.followCursorEnabled,
+      click: actions.toggleFollowCursor
+    }
+  ];
+}
+
 function actionItems(
   labels: MenuLabels,
   state: MenuState,
@@ -44,6 +63,7 @@ function actionItems(
       label: state.dogVisible ? labels.hideDog : labels.showDog,
       click: actions.toggleDog
     },
+    ...interactionItems(labels, state, actions),
     {
       label: state.focusActive ? labels.stopFocusMode : labels.startFocusMode,
       click: state.focusActive ? actions.stopFocusFromMenu : actions.startFocus
@@ -97,6 +117,7 @@ export function buildPetContextMenuTemplate(
 ): Electron.MenuItemConstructorOptions[] {
   return [
     { label: labels.settings, click: actions.openSettings },
+    ...interactionItems(labels, state, actions),
     {
       label: state.focusActive ? labels.stopFocusMode : labels.startFocusMode,
       click: state.focusActive ? actions.stopFocusFromContext : actions.startFocus

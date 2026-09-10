@@ -491,6 +491,30 @@ export function SettingsView(): JSX.Element {
       </section>
 
       <section className="prefs__group">
+        <h2 className="prefs__group-title">{labels.petInteraction}</h2>
+        <Row
+          label={labels.summonPet}
+          hint={labels.summonPetHelp}
+          control={
+            <button type="button" className="pref-button" onClick={window.fufu.summonPet}>
+              {labels.summonPet}
+            </button>
+          }
+        />
+        <Row
+          label={labels.followCursor}
+          hint={labels.followCursorHelp}
+          control={
+            <ToggleControl
+              checked={settings.followCursorEnabled}
+              onChange={window.fufu.setFollowCursor}
+              ariaLabel={labels.followCursor}
+            />
+          }
+        />
+      </section>
+
+      <section className="prefs__group">
         <h2 className="prefs__group-title">{labels.dailyRoutine}</h2>
         <Row
           label={labels.enableDailyRoutine}

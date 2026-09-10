@@ -60,6 +60,7 @@ export type Settings = {
   launchAtLoginEnabled: boolean;
   checkUpdatesOnLaunchEnabled: boolean;
   dailyRoutineEnabled: boolean;
+  followCursorEnabled: boolean;
   breakReminderEnabled: boolean;
   breakIntervalMinutes: number;
   breakRunDurationSeconds: number;
@@ -108,6 +109,7 @@ export type AppSnapshot = {
   distraction: DistractionStatus;
   petState: PetState;
   petFacing: PetFacing;
+  petMoving: boolean;
   blockingMode: BlockingMode;
   focusActive: boolean;
   dogVisible: boolean;

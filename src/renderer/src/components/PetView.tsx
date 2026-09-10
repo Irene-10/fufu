@@ -5,6 +5,8 @@ import type { PetState, SpeechBubble } from "../../../shared/types";
 import { getPetAsset, getPetAssetVariantCount } from "../assets";
 import { useNow, useSnapshot } from "../hooks";
 import { pointInElementHitbox } from "../petHitbox";
+import { PetAnimationVariants } from "../petAnimationVariants";
+import { StablePetImage } from "./StablePetImage";
 
 type DragRef = {
   pointerId: number;
@@ -27,15 +29,6 @@ const DRAG_START_DISTANCE_PX = 10;
 const PET_BUTTON_SELECTOR = ".pet-button";
 const BUBBLE_INTERACTIVE_SELECTOR = ".speech-bubble";
 
-function randomVariant(count: number, previous?: number): number {
-  if (count <= 1) return 0;
-  let next = Math.floor(Math.random() * count);
-  if (previous !== undefined && next === previous) {
-    next = (next + 1) % count;
-  }
-  return next;
-}
-
 function formatFocusCountdown(endsAt: number | null, now: number): string {
   const remainingSeconds = Math.max(0, Math.ceil(((endsAt ?? now) - now) / 1000));
   const hours = Math.floor(remainingSeconds / 3600);
@@ -48,9 +41,9 @@ export function PetView(): JSX.Element {
   const snapshot = useSnapshot();
   const now = useNow(1000);
   const [bubble, setBubble] = useState<SpeechBubble | null>(null);
-  const [assetVariant, setAssetVariant] = useState(0);
-  const [assetReplayKey, setAssetReplayKey] = useState(0);
-  const [stateSignal, setStateSignal] = useState(0);
+  const variants = useRef(new PetAnimationVariants());
+  const [, refreshVariant] = useState(0);
+  const [replay, setReplay] = useState({ key: "", count: 0 });
   const dragRef = useRef<DragRef | null>(null);
   const mouseInteractiveRef = useRef<boolean | null>(null);
   const lastMousePointRef = useRef<{ x: number; y: number } | null>(null);
@@ -60,30 +53,30 @@ export function PetView(): JSX.Element {
   useEffect(() => {
     const offBubble = window.fufu.onShowBubble(setBubble);
     const offHide = window.fufu.onHideBubble(() => setBubble(null));
-    const offPetState = window.fufu.onPetState(() => setStateSignal((current) => current + 1));
     return () => {
       offBubble();
       offHide();
-      offPetState();
     };
   }, []);
 
-  const state = snapshot.petState;
+  const state = snapshot.petMoving ? "breakRunning" : snapshot.petState;
   const altText = `Fufu ${state}`;
   const facingClass = snapshot.petFacing === "left" ? "facing-left" : "facing-right";
   const appearanceId = snapshot.settings.petAppearanceId;
   const customAppearance = snapshot.settings.customPetAppearance;
+  // IPC snapshots clone customAppearance. Key by content, not object identity.
+  const variantKey = JSON.stringify([appearanceId, customAppearance, state]);
+  const variantCount = getPetAssetVariantCount(appearanceId, state, customAppearance);
+  const assetVariant = variants.current.get(variantKey, variantCount);
+  const assetReplayKey = replay.key === variantKey ? replay.count : 0;
   const asset = getPetAsset(appearanceId, state, assetVariant, assetReplayKey, customAppearance);
 
   function finishPointerDrag(clicked: boolean): void {
     const drag = dragRef.current;
     if (!drag) return;
     dragRef.current = null;
-    if (drag.dragging) {
-      window.fufu.petDragStop();
-      return;
-    }
-    if (clicked) window.fufu.petClicked();
+    window.fufu.petDragStop();
+    if (clicked && !drag.dragging) window.fufu.petClicked();
   }
 
   function setMouseInteractive(interactive: boolean): void {
@@ -118,23 +111,22 @@ export function PetView(): JSX.Element {
   }
 
   useEffect(() => {
-    const variantCount = getPetAssetVariantCount(appearanceId, state, customAppearance);
-    setAssetVariant(randomVariant(variantCount));
-    setAssetReplayKey(0);
     if (!CONTINUOUS_ASSET_STATES.has(state) || variantCount <= 1) return;
     const timer = window.setInterval(() => {
-      setAssetVariant((current) => randomVariant(variantCount, current));
+      variants.current.rotate(variantKey, variantCount);
+      refreshVariant((current) => current + 1);
     }, CONTINUOUS_ASSET_ROTATION_MS);
     return () => window.clearInterval(timer);
-  }, [appearanceId, customAppearance, state, stateSignal]);
+  }, [variantKey, variantCount, state]);
 
   useEffect(() => {
+    setReplay({ key: variantKey, count: 0 });
     if (!asset.replayIntervalMs) return;
     const timer = window.setInterval(() => {
-      setAssetReplayKey((current) => current + 1);
+      setReplay((current) => ({ key: variantKey, count: current.key === variantKey ? current.count + 1 : 1 }));
     }, asset.replayIntervalMs);
     return () => window.clearInterval(timer);
-  }, [asset.replayIntervalMs]);
+  }, [variantKey, asset.replayIntervalMs]);
 
   useEffect(() => {
     const cancelActiveDrag = (): void => finishPointerDrag(false);
@@ -172,6 +164,7 @@ export function PetView(): JSX.Element {
   function startPointer(event: PointerEvent<HTMLButtonElement>): void {
     if (event.button !== 0) return;
     event.currentTarget.setPointerCapture(event.pointerId);
+    window.fufu.petPointerDown();
     dragRef.current = {
       pointerId: event.pointerId,
       startX: event.clientX,
@@ -253,7 +246,7 @@ export function PetView(): JSX.Element {
         onPointerUp={stopPointer}
         type="button"
       >
-        <img draggable={false} src={asset.src} alt={altText} />
+        <StablePetImage src={asset.src} alt={altText} />
       </button>
     </main>
   );

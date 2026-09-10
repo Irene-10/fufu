@@ -53,7 +53,7 @@ const STATE_FALLBACKS: Partial<Record<PetState, PetState>> = {
   hydrationDone: "happy",
   focusDone: "happy",
   working: "focusGuard",
-  eating: "idle",
+  eating: "drinking",
   exercising: "breakRunning",
   reading: "sitting"
 };

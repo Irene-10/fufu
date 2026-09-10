@@ -3,6 +3,8 @@ node_modules/
 out/
 dist/
 .pnpm-store/
+.electron-cache/
+.builder-cache/
 *.log
 _raw_assets/
 .source-import/
